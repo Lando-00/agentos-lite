@@ -1,10 +1,21 @@
-import { useState } from 'react';
-import { TextField, PrimaryButton, Stack, Spinner } from '@fluentui/react';
+import { useState, useEffect } from 'react';
+import { TextField, PrimaryButton, Stack, Spinner, Dropdown } from '@fluentui/react';
+import type { IDropdownOption } from '@fluentui/react';
+
+const providerOptions: IDropdownOption[] = [
+  { key: 'Ollama', text: 'Ollama' },
+  { key: 'Mock', text: 'Mock' },
+];
 
 function App() {
   const [input, setInput] = useState('');
   const [response, setResponse] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [provider, setProvider] = useState<string>(() => localStorage.getItem('provider') || 'Ollama');
+
+  useEffect(() => {
+    localStorage.setItem('provider', provider);
+  }, [provider]);
 
   const handleSubmit = async () => {
     if (!input.trim()) return;
@@ -14,7 +25,7 @@ function App() {
       const res = await fetch('/api/agent/query', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: input }),
+        body: JSON.stringify({ message: input, provider }),
       });
       const data = await res.json();
       setResponse(data.reply);
@@ -35,7 +46,7 @@ function App() {
       const res = await fetch('/api/agent/stream', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: input }),
+        body: JSON.stringify({ message: input, provider }),
       });
       if (!res.body) throw new Error('No stream');
 
@@ -57,7 +68,14 @@ function App() {
   };
 
   return (
-    <Stack tokens={{ childrenGap: 12 }} styles={{ root: { maxWidth: 680, margin: '40px auto' } }}>
+    <Stack tokens={{ childrenGap: 12 }} styles={{ root: { maxWidth: 720, margin: '40px auto' } }}>
+      <Dropdown
+        label="Provider"
+        options={providerOptions}
+        selectedKey={provider}
+        onChange={(_, option) => option && setProvider(option.key as string)}
+        disabled={isLoading}
+      />
       <TextField
         label="Message"
         multiline
