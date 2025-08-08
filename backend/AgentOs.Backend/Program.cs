@@ -1,18 +1,29 @@
-// backend/AgentOs.Backend/Program.cs
 using AgentOS.Backend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container
-builder.Services.AddControllers();
-builder.Services.AddScoped<IAIProvider, MockAIProvider>();
+// Config binding
+var aiSection = builder.Configuration.GetSection("AI");
+var providerName = aiSection.GetValue<string>("Provider") ?? "Mock";
 
+// Services
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+if (string.Equals(providerName, "Ollama", StringComparison.OrdinalIgnoreCase))
+{
+    var ollamaOpts = aiSection.GetSection("Ollama").Get<OllamaOptions>() ?? new OllamaOptions();
+    builder.Services.AddSingleton(ollamaOpts);
+    builder.Services.AddHttpClient<IAIProvider, OllamaAIProvider>();
+}
+else
+{
+    builder.Services.AddScoped<IAIProvider, MockAIProvider>();
+}
+
 var app = builder.Build();
 
-// Use Swagger in development
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -20,6 +31,5 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.MapControllers(); // This enables attribute-based [Route] controllers
-
+app.MapControllers();
 app.Run();
