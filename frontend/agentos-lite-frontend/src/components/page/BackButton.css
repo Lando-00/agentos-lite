@@ -1,0 +1,36 @@
+.back-button {
+  position: relative;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+  margin: 15px auto;
+}
+
+.back-button:hover {
+  transform: translateX(-2px);
+  background-color: var(--color-secondary);
+}
+
+.back-arrow {
+  font-size: 18px;
+  margin-right: 6px;
+}
+
+.back-text {
+  font-size: 14px;
+}
+
+/* Make the back button adapt to dark themes */
+[data-theme='dark'] .back-button,
+[data-theme='high-contrast'] .back-button {
+  box-shadow: 0 2px 5px rgba(255, 255, 255, 0.2);
+}

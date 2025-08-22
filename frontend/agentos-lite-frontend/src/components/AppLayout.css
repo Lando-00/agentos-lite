@@ -1,0 +1,54 @@
+.app-layout {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden; /* Prevent scrolling on the layout itself */
+}
+
+.app-layout-menu-column {
+  width: 60px;
+  min-width: 60px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+.app-layout-content-column {
+  flex: 1;
+  height: 100%;
+  width: calc(100% - 60px);
+  overflow: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.menu-button-container {
+  padding-top: 15px;
+}
+
+.menu-page-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  animation: fadeIn 0.3s ease;
+  box-sizing: border-box;
+}
+
+.menu-page-title {
+  margin: 0 0 20px 0;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.menu-page-component-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 10px 20px 10px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}

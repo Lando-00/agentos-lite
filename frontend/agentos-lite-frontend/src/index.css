@@ -1,68 +1,227 @@
 :root {
+  /* Base typography */
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  
+  /* Default light theme variables */
+  --color-primary: #0078d4;
+  --color-secondary: #2b88d8;
+  --color-background: #ffffff;
+  --color-surface: #f5f5f5;
+  --color-text-primary: #323130;
+  --color-text-secondary: #605e5c;
+  --color-message-user-bg: #f3f2f1;
+  --color-message-user-text: #323130;
+  --color-message-assistant-bg: #eef6ff;
+  --color-message-assistant-text: #323130;
+  --color-input-bg: #ffffff;
+  --color-input-text: #323130;
+  --color-input-border: #e1e1e1;
+
+  /* Typography */
+  --font-size-small: 0.875rem;
+  --font-size-medium: 1rem;
+  --font-size-large: 1.25rem;
+  --font-size-xlarge: 1.5rem;
+
+  /* Spacing */
+  --spacing-small: 8px;
+  --spacing-medium: 16px;
+  --spacing-large: 24px;
+
+  /* Border Radius */
+  --border-radius-small: 4px;
+  --border-radius-medium: 8px;
+  --border-radius-large: 12px;
+
+  /* Shadows */
+  --shadow-small: 0 1px 2px rgba(0, 0, 0, 0.1);
+  --shadow-medium: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-large: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  min-width: 320px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  transition: all 0.4s ease-in-out;
+}
+
+.title {
+  color: var(--color-text-primary);
 }
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: var(--color-primary);
   text-decoration: inherit;
+  transition: color 0.2s ease;
 }
 a:hover {
-  color: #535bf2;
+  color: var(--color-secondary);
 }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
+h1, .title {
+  font-size: var(--font-size-xlarge);
   line-height: 1.1;
+  color: var(--color-text-primary);
 }
 
 button {
-  border-radius: 8px;
+  border-radius: var(--border-radius-medium);
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
-  font-size: 1em;
+  font-size: var(--font-size-medium);
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: border-color 0.25s, background-color 0.25s, color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: var(--color-primary);
 }
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+/* Dark theme variables */
+[data-theme='dark'] {
+  --color-primary: #3b9cff;
+  --color-secondary: #62b5f6;
+  --color-background: #1a1a1a;
+  --color-surface: #2d2d2d;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #c8c8c8;
+  --color-message-user-bg: #3a3a3a;
+  --color-message-user-text: #ffffff;
+  --color-message-assistant-bg: #104e8b;
+  --color-message-assistant-text: #ffffff;
+  --color-input-bg: #2d2d2d;
+  --color-input-text: #ffffff;
+  --color-input-border: #444444;
+  
+  /* Shadows for dark theme */
+  --shadow-small: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-medium: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-large: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Blue theme variables */
+[data-theme='blue'] {
+  --color-primary: #0062cc;
+  --color-secondary: #4096ff;
+  --color-background: #f0f5ff;
+  --color-surface: #e6f0ff;
+  --color-text-primary: #003366;
+  --color-text-secondary: #004b8c;
+  --color-message-user-bg: #cce4ff;
+  --color-message-user-text: #003366;
+  --color-message-assistant-bg: #0062cc;
+  --color-message-assistant-text: #ffffff;
+  --color-input-bg: #ffffff;
+  --color-input-text: #003366;
+  --color-input-border: #b3d1ff;
+  
+  /* Shadows for blue theme */
+  --shadow-small: 0 1px 2px rgba(0, 0, 0, 0.1);
+  --shadow-medium: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-large: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* High contrast theme variables */
+[data-theme='high-contrast'] {
+  --color-primary: #ffffff;
+  --color-secondary: #ffff00;
+  --color-background: #000000;
+  --color-surface: #121212;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #ffff00;
+  --color-message-user-bg: #000080;
+  --color-message-user-text: #ffffff;
+  --color-message-assistant-bg: #006400;
+  --color-message-assistant-text: #ffffff;
+  --color-input-bg: #000000;
+  --color-input-text: #ffffff;
+  --color-input-border: #ffffff;
+  
+  /* Shadows for high contrast theme */
+  --shadow-small: 0 1px 3px rgba(255, 255, 255, 0.3);
+  --shadow-medium: 0 2px 6px rgba(255, 255, 255, 0.3);
+  --shadow-large: 0 4px 12px rgba(255, 255, 255, 0.3);
+  
+  /* Larger font sizes for better readability */
+  --font-size-small: 1rem;
+  --font-size-medium: 1.2rem;
+  --font-size-large: 1.5rem;
+  --font-size-xlarge: 1.8rem;
+}
+
+/* 
+ * Custom theme - variables will be dynamically set by ThemeBuilder 
+ * We include this as a comment rather than an empty ruleset to prevent linting errors
+ */
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
   }
-  a:hover {
-    color: #747bff;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  button {
-    background-color: #f9f9f9;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-10px);
+    opacity: 0;
   }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes themeTransition {
+  0% {
+    transform: scale(1);
+    filter: brightness(100%);
+  }
+  50% {
+    transform: scale(1.01);
+    filter: brightness(105%);
+  }
+  100% {
+    transform: scale(1);
+    filter: brightness(100%);
+  }
+}
+
+.fadeIn {
+  animation: fadeIn 0.3s ease-in-out forwards;
+}
+
+.slideIn {
+  animation: slideIn 0.3s ease-in-out forwards;
+}
+
+/* Apply transition animation when theme changes */
+.theme-transition {
+  animation: themeTransition 0.5s ease-in-out;
 }
