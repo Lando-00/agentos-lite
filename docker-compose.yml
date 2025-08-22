@@ -1,0 +1,73 @@
+services:
+  backend:
+    build:
+      context: ./backend/AgentOsLite.Backend
+      dockerfile: Dockerfile
+    environment:
+      ASPNETCORE_URLS: http://+:8080
+      Kestrel__Endpoints__Http__Url: http://0.0.0.0:8080
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Server=mssql,1433;Database=AgentOSLite;User ID=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=True;"
+      Blob__Endpoint: "http://minio:9000"
+      Blob__AccessKey: "${MINIO_ROOT_USER}"
+      Blob__SecretKey: "${MINIO_ROOT_PASSWORD}"
+      Blob__Bucket: "agentos"
+    ports:
+      - "5000:8080"
+    depends_on:
+      - mssql
+      - minio
+
+  frontend:
+    build:
+      context: ./frontend/agentos-lite-frontend
+      dockerfile: Dockerfile
+    environment:
+      # Frontend talks to backend by service name on the compose network
+      VITE_API_BASE_URL: "http://localhost:5000"
+    ports:
+      - "5173:5173"   # Vite dev server
+    depends_on:
+      - backend
+
+  mssql:
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    platform: linux/arm64/v8
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "${MSSQL_SA_PASSWORD}"
+      MSSQL_PID: "Developer"
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql
+
+  minio:
+    image: quay.io/minio/minio:latest
+    environment:
+      MINIO_ROOT_USER: "${MINIO_ROOT_USER}"
+      MINIO_ROOT_PASSWORD: "${MINIO_ROOT_PASSWORD}"
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"   # S3 API
+      - "9001:9001"   # MinIO Console
+    volumes:
+      - minio_data:/data
+
+  # one-shot helper to create a bucket at first run
+  minio-mc:
+    image: quay.io/minio/mc:latest
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc alias set local http://minio:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD} &&
+      /usr/bin/mc mb -p local/agentos || true &&
+      /usr/bin/mc anonymous set download local/agentos || true &&
+      echo 'Bucket ensured';
+      "
+    restart: "no"
+
+volumes:
+  mssql_data:
+  minio_data:
