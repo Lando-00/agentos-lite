@@ -1,0 +1,56 @@
+# Root .gitignore for AgentOS Lite
+# This combines patterns for different parts of the project
+
+# IDE and Editor files
+.vs/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sw?
+*.user
+
+# OS specific files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Environment variables and secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Log files
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Solution-specific files that should not be tracked
+agentos-lite.sln.DotSettings
+*.DotSettings.user
+
+# Additional files and directories to ignore
+.ionide/
+/coverage
+.coverage/
+.nyc_output/
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+.sass-cache/
+.temp/
+
+# Frontend is managed by its own .gitignore
+# Backend is managed by its own .gitignore
